@@ -3,7 +3,6 @@
 BEGIN {
     if (POLE)
     {
-        print "POLE", POLE
         if (POLE == 1)
         {
             action["0.25"] = "enter"
