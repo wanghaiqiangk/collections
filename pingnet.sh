@@ -6,14 +6,14 @@ else
     target=${target:="baidu.com"}
 fi
 export TZ="CST-08:00:00"
-logfile="/root/watchnet_$(date +%Y-%m-%d).log"
+logfile="/root/${target%\.com}_$(date +%Y-%m-%d).log"
 printf "%10s %8s %15s %4s %4s %4s %8s %8s %8s\n" DATE TIME IP TC RC LOSS MIN AVG MAX >> ${logfile}
 changeday=$(date +%d)
 while : ; do
     currday=$(date +%d)
     if [ ${currday} -ne ${changeday} ]; then
-        logfile="/root/watchnet-$(date +%Y-%m-%d).log"
-        printf "%10s %8s %15s %4s %4s %4s %8s %8s %8s\n" DATE TIME IP TC RC LOSS MIN AVG MAX
+        logfile="${logfile%_*}_$(date +%Y-%m-%d).log"
+        printf "%10s %8s %15s %4s %4s %4s %8s %8s %8s\n" DATE TIME IP TC RC LOSS MIN AVG MAX >> ${logfile}
         changeday=${currday}
     fi
     time=$(date "+%Y-%m-%d %H:%M:%S")
@@ -34,5 +34,5 @@ while : ; do
     avg=$(echo $res | sed -n 's,^.*/\([0-9][0-9]*\.[0-9][0-9]*\)/.*$,\1,gp')
     max=$(echo $res | sed -n 's,^.*/\([0-9][0-9]*\.[0-9][0-9]*\) ms.*$,\1,gp')
 
-    printf "%s %15s %4s %4s %4s %8s %8s %8s\n" "$time" $ip $tc $rc $loss $min $avg $max
-done >> ${logfile}
+    printf "%s %15s %4s %4s %4s %8s %8s %8s\n" "$time" $ip $tc $rc $loss $min $avg $max >> ${logfile}
+done
